@@ -2,7 +2,7 @@
 
 Dylan Beaudette, Richard Reid, Todd Skaggs
 
-![Example: ROSETTA Web Service]()
+![Example: ROSETTA Web Service](https://github.com/ncss-tech/ROSETTA-docs/blob/main/static-figures/Rosetta_web%20service.png)
 
 2021-01-12
 
