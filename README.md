@@ -8,7 +8,15 @@ Dylan Beaudette, Richard Reid, Todd Skaggs
 
 ### Introduction
 
-This document outlines how to query soils data and access a new, online, interface to the ROSETTA model for predicting hydraulic parameters from soil properties. The ROSETTA API and web service were developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). 
+This document outlines how to query soils data and access a new, online, interface to the ROSETTA model for predicting hydraulic parameters from soil properties. The ROSETTA API and web service were developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). ROSETTA can be used to estimate the Van Genuchten hydraulic parameters that include the following:
+
+theta_r - the residual soil water content, (cm3 cm-3)
+theta_s - the saturated soil water content, (cm3 cm-3)
+alpha_(1/cm) - parameter of the van Genuchten equation corresponding approximately to the inverse of
+the air-entry value, (cm-1)
+n - the empirical shape-defining parameters in the van Genuchten equation, (dimensionless)       
+Ksat_(cm/d) the effective saturated hydraulic conductivity, (cm day-1);
+
 
 The ROSETTA model relies on a minimum of 3 soil properties, with increasing (expected) accuracy as additional properties are included:
 
@@ -27,7 +35,7 @@ Through the ROSETTA REST API, a “proof of concept” python script can be used
 
 ### Versioning
 
-(ROSETTA 1) ROSETTA: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions - Schaap, et al.
+(ROSETTA 1) ROSETTA: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions - Schaap, et al.(https://www.ars.usda.gov/arsuserfiles/20360500/pdf_pubs/P1765.pdf)
 (ROSETTA 2) Comparison of Models for Indirect Estimation of Water Retention and Available Water in Surface Soils - Schaap, et al. (this one is called version 1.3 in the software the engineers currently have)
 (ROSETTA3) Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3) - Zhang, Schaap
 
