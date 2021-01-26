@@ -2,8 +2,6 @@
 
 Dylan Beaudette, Richard Reid, Todd Skaggs
 
-![Example: ROSETTA Web Service](https://github.com/ncss-tech/ROSETTA-docs/blob/main/static-figures/Rosetta_web%20service.png)
-
 2021-01-12
 
 ## Introduction
@@ -34,7 +32,10 @@ Soil properties must be described, in order, via vars argument. The API does not
 
 For engineering applications, current processes being used to access authoritative soils data, predict hydraulic parameters, and subsequently calculate lateral effects distances are time consuming and a considerable amount of pre and post processing are required. ROSETTA hydraulic outputs included in the web service and API include output parameters of importance for engineering applications.
 
-A simplified version of ROSETTA is available as a web service and accepts user input soils parameters that can be manually inserted or pasted from an external table of soil parameters. The web service can be found [here](https://www.handbook60.org/rosetta/).
+A simplified version of ROSETTA is available as a web service and accepts user input soils parameters that can be manually inserted or pasted from an external table of soil parameters. The web service can be found [here](https://www.handbook60.org/rosetta/). An example of the ROSETTA web service interface is shown in Figure 1 below.
+
+* Figure 1 - Web Service Interface of ROSETTA example
+![Example: ROSETTA Web Service](https://github.com/ncss-tech/ROSETTA-docs/blob/main/static-figures/Rosetta_web%20service.png)
 
 Through the ROSETTA REST API, a “proof of concept” python script can be used in IDLE to automate things and avoid the manual web interface. IDLE is python’s integrated development environment and comes with ArcPro however, python is a universal language and can be used in many different applications.
 
