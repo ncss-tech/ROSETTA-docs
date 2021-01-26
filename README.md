@@ -35,8 +35,10 @@ Through the ROSETTA REST API, a “proof of concept” python script can be used
 
 ### Versioning
 
-(ROSETTA 1) ROSETTA: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions - Schaap, et al.(https://www.ars.usda.gov/arsuserfiles/20360500/pdf_pubs/P1765.pdf)
+(ROSETTA 1) ROSETTA: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions - Schaap, et al(https://www.ars.usda.gov/arsuserfiles/20360500/pdf_pubs/P1765.pdf)
+
 (ROSETTA 2) Comparison of Models for Indirect Estimation of Water Retention and Available Water in Surface Soils - Schaap, et al. (this one is called version 1.3 in the software the engineers currently have)
+
 (ROSETTA3) Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3) - Zhang, Schaap
 
 ROSETTA Version 1 is the original. Version 3 is the newest.  Version 2 is currently what the engineers use to estimate the hydraulic parameters used in LE equations. This version has been added which is a bit different from version 1 and 3. Additionally, the new API allows logarithmic or linear output parameters to be returned. 
