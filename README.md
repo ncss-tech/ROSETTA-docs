@@ -28,3 +28,8 @@ Through the ROSETTA REST API, a “proof of concept” python script can be used
 ROSETTA Version 1 is the original. Version 3 is the newest.  Version 2 is currently what the engineers use to estimate the hydraulic parameters used in LE equations. This version has been added which is a bit different from version 1 and 3. Additionally, the new API allows logarithmic or linear output parameters to be returned. 
 
 Looking to the future, I’m exploring ways to automate the other puzzle piece to lateral effects distance determination which is the soil Hydrogeomorphic wetland classification into a web service that could be “called” along with the authoritative soil data.
+
+Testing and Validation 
+
+For testing and validation purposes a "test" dataset must be created and used to predict hydraulic output parameters for each version of the ROSETTA model.
+
