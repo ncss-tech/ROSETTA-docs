@@ -41,6 +41,111 @@ A simplified version of ROSETTA is available as a web service and accepts user i
 
 Through the ROSETTA REST API, a “proof of concept” python script can be used in IDLE to automate things and avoid the manual web interface. IDLE is python’s integrated development environment and comes with ArcPro however, python is a universal language and can be used in many different applications.
 
+There are many options for using the ROSETTA REST API. Two methods will be explored here. One method is to query the authoritative soils data and run the ROSETTA predictions simultaneously. Another method is to place an existing soils input table into the script and run the ROSETTA predictions. There are pros and cons of using each method. 
+
+### Option 1 - Query the authoritative soils data and run the ROSETTA predictions simultaneously in Python
+
+"""
+Proof-of-concept for generating soil hydraulic parameters using
+SDMDataAccess and the Rosetta web api.
+
+"""
+import requests
+import sys
+from typing import List
+
+
+def rosetta_url(rosetta_version: int) -> str:
+    return f"http://www.handbook60.org/api/v1/rosetta/{rosetta_version}"
+
+
+def query(areasymbol: str) -> str:
+    return f"""
+		SELECT
+                           areasymbol,
+                           muname,
+		           musym,
+		           mapunit.mukey,
+                           component.cokey
+			   compname,
+			   comppct_r,
+			   chorizon.hzname,
+			   chorizon.hzdept_r,
+			   chorizon.hzdepb_r,
+			   chorizon.sandtotal_r,
+			   chorizon.silttotal_r,
+			   chorizon.claytotal_r,
+			   chorizon.dbthirdbar_r,
+			   chorizon.wthirdbar_r / 100   AS wthirdbar_decimal,
+			   chorizon.wfifteenbar_r / 100 AS wfifteenbar_decimal
+		FROM    (legend
+		INNER JOIN (mapunit
+		INNER JOIN component
+		ON mapunit.mukey = component.mukey)
+		ON legend.lkey = mapunit.lkey)
+		INNER JOIN chorizon
+		ON component.cokey = chorizon.cokey
+		WHERE  comppct_r >= 10 AND legend.areasymbol LIKE '{areasymbol}'
+    """
+
+
+def request_ssurgo_tabular(areasymbol: str) -> List[List]:
+
+    url = "https://SDMDataAccess.sc.egov.usda.gov/Tabular/post.rest"
+    params = {"format": "JSON+COLUMNNAME", "query": query(areasymbol)}
+    r = requests.post(url, data=params)
+
+    if not r.ok:
+        print(f"Error!\nStatus code: {r.status_code}\nMessage:\n{r.text}")
+        sys.exit()
+
+    return r.json()["Table"]
+
+
+def main():
+    rosetta_version = 2
+    area_symbol = "SD%"
+
+    print(f"Requesting SSURGO data for {area_symbol} ...")
+    ssurgo_data = request_ssurgo_tabular(area_symbol)
+    print("Success!")
+
+    # this next line assumes the fields sa, si, cl, bd, th33, th1500 were at
+    # the end of the ssurgo SELECT (and in that order)
+    rosetta_input = [row[-6:] for row in ssurgo_data[1:]]
+
+    print("Requesting Rosetta estimates ...")
+    r = requests.post(rosetta_url(rosetta_version), json={"X": rosetta_input})
+
+    if not r.ok:
+        print(f"Error!\nStatus code: {r.status_code}\nMessage:\n{r.text}")
+        sys.exit()
+    print("Success!")
+
+    # We are done. Now it is just a question of what to do with the results.
+    # Here I dump everything to csv
+
+    rosetta_header = "thr ths log10_alpha_(1/cm) log10_npar log_Ksat_(cm/d)".split()
+    import csv
+
+    with open("SDA_ROSETTA_results.csv", "w", newline="") as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(ssurgo_data[0] + rosetta_header + ["model_code"])
+        for a, b, c in zip(
+            ssurgo_data[1:], r.json()["van_genuchten_params"], r.json()["model_codes"]
+        ):
+            writer.writerow(a + b + [c])
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+### Option 2 - Use an existing soils input data table to run ROSETTA predictions in Python
+
+
+
 ## Versioning
 
 (ROSETTA 1) ROSETTA: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions - Schaap, et al(https://www.ars.usda.gov/arsuserfiles/20360500/pdf_pubs/P1765.pdf)
