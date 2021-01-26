@@ -11,10 +11,13 @@ Dylan Beaudette, Richard Reid, Todd Skaggs
 This document outlines how to query soils data and access a new, online, interface to the ROSETTA model for predicting hydraulic parameters from soil properties. The ROSETTA API and web service were developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). ROSETTA can be used to estimate the Van Genuchten hydraulic parameters that include the following:
 
 theta_r - the residual soil water content, (cm3 cm-3)
+
 theta_s - the saturated soil water content, (cm3 cm-3)
-alpha_(1/cm) - parameter of the van Genuchten equation corresponding approximately to the inverse of
-the air-entry value, (cm-1)
-n - the empirical shape-defining parameters in the van Genuchten equation, (dimensionless)       
+
+alpha_(1/cm) - parameter of the van Genuchten equation corresponding approximately to the inverse of the air-entry value, (cm-1)
+
+n - the empirical shape-defining parameters in the van Genuchten equation, (dimensionless) 
+
 Ksat_(cm/d) the effective saturated hydraulic conductivity, (cm day-1);
 
 
