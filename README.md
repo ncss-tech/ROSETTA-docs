@@ -2,6 +2,8 @@
 
 Dylan Beaudette, Richard Reid, Todd Skaggs
 
+![Example: Service Data](https://jneme910.github.io/CART/TableImages/Service%20Data.PNG)
+
 2021-01-12
 
 ### Introduction
