@@ -2,7 +2,7 @@
 
 ![ROSETTA Banner](https://github.com/ncss-tech/ROSETTA-docs/blob/main/static-figures/Rosetta_Banner.png)
 
-Dylan Beaudette, Richard Reid, Todd Skaggs
+Richard Reid, Dylan Beaudette, Todd Skaggs
 
 2021-01-12
 
