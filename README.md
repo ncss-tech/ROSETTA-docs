@@ -144,6 +144,179 @@ if __name__ == "__main__":
 
 ### Option 2 - Use an existing soils input data table to run ROSETTA predictions in Python
 
+from typing import List, Union                                                           
+import requests                                                                          
+                                                                                         
+DATA = {                                                                                 
+    "X": [                                                                               
+        [49, 7.0, 44, 0.99, 0.29011, 0.0261],                                            
+        [42, 30, 28, 1.78, 0.2434, 0.09031],                                             
+        [30, 46, 24, 1.02],                                                              
+        ["30", "46", "24", "1.02"],                                                      
+        [34, 38, 28, 1.23, 0.21066, "BAD"],                                              
+        [22, 43, 35, 1.56, 0.16495, 0.02243],                                            
+        [85, 9.0, 6.0, 1.08, -99, 0.07483],                                              
+        [31, 44, 25, 1.44, 0.1977, 0.09442],                                             
+        # next entry lacks  minimal required sa, si, cl data                             
+        [12, 21, "NAN", 1.02, 0.18889, 0.00821],                                         
+        [48, 11, 41, 1.80, 0.2677, 0.12446],                                             
+        [82, 2.2, 16, 1.58, 0.21149, 0.12008],                                           
+        [None, None, None, None, None, None],                                            
+        [84, 16, 0.0, 1.08, 0.17206, 0.023],                                             
+        [71, 24, 5.0, 1.88, 0.28051, 0.12799],                                           
+        # next entry sa, si, cl are out of bounds, sum >> 100                            
+        [142, 33, 25, 0.73, 0.22333, 0.12299],                                           
+        [39, 22, 39, 0.68, 0.21911, 0.00119],                                            
+    ]                                                                                    
+}                                                                                        
+                                                                                         
+                                                                                         
+def url(version: int) -> str:                                                            
+    return f"http://www.handbook60.org/api/v1/rosetta/{version}"                         
+                                                                                         
+def to_nan(hydparams: List[Union[float, None]]) -> List[float]:                          
+    """covert any None parameter values to nan"""                                        
+    return [v if v is not None else float("nan") for v in hydparams]                     
+                                                                                         
+def to_linear(hydparams: List[float]) -> List[float]:                                    
+    """convert alp, npar, ksat to linear values."""                                      
+    hydparams[2:] = [10 ** v for v in hydparams[2:]]                                     
+    return hydparams                                                                     
+                                                                                         
+                                                                                         
+def pretty_print(parameters: List[List[float]], codes: List[int]) -> str:                   
+    out = ("{:>10}" * 6).format(*"code thr ths alpha npar ksat".split())                 
+    out += "\n"                                                                          
+    fmt = "{:10}" + "{:10.5f}" * 5 + "\n"                                                
+    for params, code in zip(parameters, codes):                                          
+        out += fmt.format(code, *params)                                                 
+    out += "\nUnits are alp = 1/cm, ksat = cm/d\n"                                       
+    return out                                                                           
+                                                                                         
+                                                                                         
+r = requests.post(url(version=2), json=DATA)
+
+if r.ok:                                                                                 
+    params = [to_nan(row) for row in r.json()["van_genuchten_params"]]                   
+    params = [to_linear(row) for row in params]                                          
+    print(pretty_print(params, r.json()["model_codes"]))                                 
+else:                                                                                    
+    print(r.status_code)                                                                 
+    print(r.text)
+
+## ROSETTA API Notes
+
+### URL:
+
+https://www.handbook60.org/api/v1/rosetta/{int:v}
+
+
+where
+
+v = 1, 2, or 3
+
+
+e.g.:
+
+https://www.handbook60.org/api/v1/rosetta/3
+
+(Note: when making a request using the python Requests library, I had to use “http” rather than “https”. Not sure why.)
+
+### JSON data
+
+The POST request expects a json payload with the form
+
+{‘X’: data}
+
+where data is a list of lists,  [[,,,],[,,,],[,,,] … ]
+
+Each sublist must be one of the following:
+                             
+Data                                                                                                             (Also known as)
+ [sand%, silt%, clay%]                      (model code 2)                           
+ [sand%, silt%, clay%, rho_b]               (model code 3)                                                         
+ [sand%, silt%, clay%, rho_b, th33]         (model code 4)                                                        
+ [sand%, silt%, clay%, rho_b, th33, th1500] (model code 5)                           
+
+where:                                                                                   
+                                                                                        
+ sand%, silt%, and clay%       are the soil separates (sum to ~100)                           
+ rho_b    is soil bulk density (gm/cm3)                                                    
+   th33    is the soil volumetric water content at 33 kPa                                    
+   th1500   is the  soil volumetric water content at 1500 kPa  
+
+#### E.g., the json payload might be
+
+{‘X’: [[30,40.5,29.5,1.6],[10,50,40],[90,5,5,1.7,0.22,0.09]]}
+
+Note that even if there is only one sublist, ‘X’ still needs to be 2D list:
+
+ {‘X’: [[30,40.5,29.5,1.6]]}
+
+### Returned values
+
+The returned json has the form
+
+{“van_genuchten_params”: [[,,,,],[,,,,],...],
+ “model_codes”: [,, …],
+ “rosetta_version”: int
+}
+
+Each sublist in “van_genucthen_params”  is
+
+[theta_r, theta_s, log10(alpha), log10(npar), log10(ksat)]
+
+where
+
+theta_r  : residual volumetric water content                                            
+theta_s  : saturated volumetric water content                                           
+alpha       : retention shape parameter (1/cm)                                                       
+npar          : retention shape parameter                                                              
+ksat        : saturated hydraulic conductivity (cm/day)
+
+“model_codes” is the list of model codes used to predict the corresponding entry in “van_genuchten_params”
+
+“rosetta_version” is the Rosetta version
+
+
+### An example using curl:
+
+curl -X POST -H "Content-Type:application/json" -d '{"X": [[50,40,10,1.6,0.25],[10,40,50,1.5,0.2]]}' "https://www.handbook60.org/api/v1/rosetta/3"
+
+{"model_codes": [4, 3], "rosetta_version": 3, "van_genuchten_params": [[0.06930329923825358, 0.3554805457584735, -2.0910869111740067, 0.13999104372677112, 1.1086406024382627], [0.12952613311555153, 0.43802529604640894, -2.1426087306876362, 0.10828373362008699, 0.6976299524746705]]}
+
+
+
+
+### An example using python requests:
+
+import requests                                                                             
+                                                                                         
+DATA = {                                                                                 
+    "X": [                                                                               
+        [49, 7.0, 44, 0.99, 0.29011, 0.0261],                                            
+        [42, 30, 28, 1.78, 0.2434, 0.09031],                                             
+        [30, 46, 24, 1.02],                                                              
+    ]                                                                                    
+}                                                                                        
+                                                                                         
+                                                                                         
+def url(version: int) -> str:                                                            
+    return f"http://www.handbook60.org/api/v1/rosetta/{version}"                         
+                                                                                         
+r = requests.post(url(version=2), json=DATA)                                             
+                                                                                         
+if r.ok:                                                                                 
+    print(r.json())                                                                      
+else:                                                                                    
+    print(r.status_code)                                                                    
+    print(r.text)
+
+
+
+### Results:
+
+{'model_codes': [5, 5, 3], 'rosetta_version': 2, 'van_genuchten_params': [[0.03626029823435693, 0.5130283664640276, -2.0560562191308946, 0.14028088599077657, 1.9844066153092994], [0.04371623299088531, 0.3216468185313934, -2.160978983929374, 0.13509126645704977, 0.7097915645849571], [0.0800992063209251, 0.5159619107502098, -2.060414700720488, 0.13422539000745515, 1.957106692448703]]}
 
 
 ## Versioning
