@@ -35,6 +35,7 @@ Soil properties must be described, in order, via vars argument. The API does not
 For engineering applications, current processes being used to access authoritative soils data, predict hydraulic parameters, and subsequently calculate lateral effects distances are time consuming and a considerable amount of pre and post processing are required. ROSETTA hydraulic outputs included in the web service and API include output parameters of importance for engineering applications.
 
 ROSETTA hydraulic parameters are also used in a variety of other ways including:
+* Modeling changes in soil properties caused by use and management and their effects on soil hydraulic parameters
 * HYDRUS-3D Simulation of Soil Water Dynamics in Drip-Irrigated Settings
 * Land Surface Modeling
 * Agroecosystem models
