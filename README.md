@@ -35,7 +35,7 @@ Soil properties must be described, in order, via vars argument. The API does not
 From an engineering context, predicting soil hydraulic parameters, used to model flow and transport, and subsequently calculating lateral effect distances has historically been time consuming. The current processes used to access authoritative soils data, predict hydraulic parameters, and subsequently calculate lateral effects distances (see Figure 1) require a significant commitment of time from hydraulic engineers. ROSETTA hydraulic outputs included in the web service and API include output parameters of importance for engineering, agronomic, and climate modeling applications.
 
 * Figure 1 - Lateral Effects Diagram
-![Figure 1: Lateral Effects Diagram](https://github.com/ncss-tech/ROSETTA-docs/blob/main/static-figures/.png)
+![Figure 1: Lateral Effects Diagram](https://github.com/ncss-tech/ROSETTA-docs/blob/main/static-figures/lateral%20effects.png)
 
 ROSETTA hydraulic parameters are also used in a variety of other ways including:
 * Modeling changes in soil properties caused by use and management and their effects on soil hydraulic parameters
@@ -48,7 +48,7 @@ ROSETTA hydraulic parameters are also used in a variety of other ways including:
 A simplified version of ROSETTA is available as a web service and accepts user input soils parameters that can be manually inserted or pasted from an external table of soil parameters. The web service can be found [here](https://www.handbook60.org/rosetta/). An example of the ROSETTA web service interface is shown in Figure 2 below.
 
 * Figure 2 - Web Service Interface of ROSETTA example
-![Example: ROSETTA Web Service](https://github.com/ncss-tech/ROSETTA-docs/blob/main/static-figures/lateral%20effects.png)
+![Example: ROSETTA Web Service](https://github.com/ncss-tech/ROSETTA-docs/blob/main/static-figures/Rosetta_web%20service.png)
 
 Through the ROSETTA REST API, a “proof of concept” python script can be used in IDLE to automate things and avoid the manual web interface. IDLE is python’s integrated development environment and comes with ArcPro however, python is a universal language and can be used in many different applications.
 
