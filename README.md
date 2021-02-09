@@ -10,27 +10,27 @@ Richard Reid, Dylan Beaudette, Todd Skaggs
 
 This document outlines how to query soils data and access a new, online, interface to the ROSETTA model for predicting hydraulic parameters from soil properties. The ROSETTA API and web service were developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). ROSETTA can be used to estimate the Van Genuchten hydraulic parameters that include the following:
 
-theta_r - the residual soil water content, (cm3 cm-3)
+   * **theta_r:** the residual soil water content, $(cm^{3} / cm^{3})$
 
-theta_s - the saturated soil water content, (cm3 cm-3)
+   * **theta_s:** the saturated soil water content, $(cm^{3} / cm^{3})$
 
-alpha_(1/cm) - parameter of the van Genuchten equation corresponding approximately to the inverse of the air-entry value, (cm-1)
+   * **alpha:**  parameter of the van Genuchten equation corresponding approximately to the inverse of the air-entry value, $(cm^{-1})$
 
-n - the empirical shape-defining parameters in the van Genuchten equation, (dimensionless) 
+   * **n:** the empirical shape-defining parameters in the van Genuchten equation, (dimensionless) 
 
-Ksat_(cm/d) the effective saturated hydraulic conductivity, (cm day-1);
+   * **Ksat** the effective saturated hydraulic conductivity, $(cm / day)$
 
 
 The ROSETTA model relies on a minimum of 3 soil properties, with increasing (expected) accuracy as additional properties are included:
 
-* required, sand, silt, clay: USDA soil texture separates (percentages) that sum to 100%
-* optional, bulk density (any moisture basis): mass per volume after accounting for >2mm fragments, units of gm/cm3
-* optional, volumetric water content at 33 kPa: roughly “field capacity” for most soils, units of cm3/cm3
-* optional, volumetric water content at 1500 kPa: roughly “permanent wilting point” for most plants, units of cm3/cm3
+   * required, sand, silt, clay: USDA soil texture separates (percentages) that sum to 100%
+   * optional, bulk density (any moisture basis): mass per volume after accounting for >2mm fragments, units of gm/cm3
+   * optional, volumetric water content at 33 kPa: roughly “field capacity” for most soils, units of cm3/cm3
+   * optional, volumetric water content at 1500 kPa: roughly “permanent wilting point” for most plants, units of cm3/cm3
 
 Soil properties must be described, in order, via vars argument. The API does not use logical names but column ordering must follow: sand, silt, clay, bulk density, volumetric water content at 33kPa (1/3 bar), and volumetric water content at 1500kPa (15 bar).
 
-## Background and Practical Application
+## Background and Practical Applications
 
 From an engineering context, predicting soil hydraulic parameters, used to model flow and transport, and subsequently calculating lateral effect distances has historically been time consuming. The current processes used to access authoritative soils data, predict hydraulic parameters, and subsequently calculate lateral effects distances (see Figure 1) require a significant commitment of time from hydraulic engineers. ROSETTA hydraulic outputs included in the web service and API include output parameters of importance for engineering, agronomic, and climate modeling applications.
 
@@ -38,12 +38,12 @@ From an engineering context, predicting soil hydraulic parameters, used to model
 ![Figure 1: Lateral Effects Diagram](https://github.com/ncss-tech/ROSETTA-docs/blob/main/static-figures/lateral%20effects.png)
 
 ROSETTA hydraulic parameters are also used in a variety of other ways including:
-* Modeling changes in soil properties caused by use and management and their effects on soil hydraulic parameters
-* HYDRUS-3D Simulation of Soil Water Dynamics in Drip-Irrigated Settings
-* Land Surface Modeling
-* Agroecosystem models
-* regional and global climate models, and 
-* Numerical weather prediction models 
+   * Modeling changes in soil properties caused by use and management and their effects on soil hydraulic parameters
+   * HYDRUS-3D Simulation of Soil Water Dynamics in Drip-Irrigated Settings
+   * Land Surface Modeling
+   * Agroecosystem models
+   * regional and global climate models, and 
+   * Numerical weather prediction models 
 
 A simplified version of ROSETTA is available as a web service and accepts user input soils parameters that can be manually inserted or pasted from an external table of soil parameters. The web service can be found [here](https://www.handbook60.org/rosetta/). An example of the ROSETTA web service interface is shown in Figure 2 below.
 
@@ -56,6 +56,7 @@ There are many options for using the ROSETTA REST API. Two methods will be explo
 
 ### Option 1 - Query the authoritative soils data and run the ROSETTA predictions simultaneously in Python
 
+```{python eval = FALSE}
 """
 Proof-of-concept for generating soil hydraulic parameters using
 SDMDataAccess and the Rosetta web api.
@@ -214,6 +215,7 @@ if r.ok:
 else:                                                                                    
     print(r.status_code)                                                                 
     print(r.text)
+```
 
 ## ROSETTA API Notes
 
@@ -300,7 +302,7 @@ curl -X POST -H "Content-Type:application/json" -d '{"X": [[50,40,10,1.6,0.25],[
 
 
 ### An example using python requests:
-
+```{python eval = FALSE}
 import requests                                                                             
                                                                                          
 DATA = {                                                                                 
@@ -322,13 +324,13 @@ if r.ok:
 else:                                                                                    
     print(r.status_code)                                                                    
     print(r.text)
-
+```
 
 
 ### Results:
-
+```
 {'model_codes': [5, 5, 3], 'rosetta_version': 2, 'van_genuchten_params': [[0.03626029823435693, 0.5130283664640276, -2.0560562191308946, 0.14028088599077657, 1.9844066153092994], [0.04371623299088531, 0.3216468185313934, -2.160978983929374, 0.13509126645704977, 0.7097915645849571], [0.0800992063209251, 0.5159619107502098, -2.060414700720488, 0.13422539000745515, 1.957106692448703]]}
-
+```
 
 ## Versioning
 
