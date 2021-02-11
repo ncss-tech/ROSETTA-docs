@@ -2,13 +2,15 @@
 
 ![ROSETTA Banner](https://github.com/ncss-tech/ROSETTA-docs/blob/main/static-figures/Rosetta_Banner.png)
 
-Richard Reid, Dylan Beaudette, Todd Skaggs
+Richard Reid, Dylan Beaudette, Maria Hrebik, Kelly Scott, Todd Skaggs
 
 2021-01-12
 
 ## Introduction
 
-This document outlines how to query soils data and access a new, online, interface to the ROSETTA model for predicting hydraulic parameters from soil properties. The ROSETTA API and web service were developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). ROSETTA can be used to estimate the Van Genuchten hydraulic parameters that include the following:
+The purpose of this site is to document the procedure for taking NRCS soil parameters and estimate soil water characteristics and dynamic conductivity for use in various modeling of water and nutrient transports through the soil. Historically, NRCS has relied on the ROSETTA model to complete this estimation. ROSETTA was developed by ARS through the work of Schaap, et al. Most recently the ROSETTA model has been updated to fit into the web environment by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). This site provides the process, assumptions, and code associated with this transition.  
+
+ROSETTA can be used to estimate the van Genuchten hydraulic parameters that include the following:
 
    * **theta_r:** the residual soil water content, $(cm^{3} / cm^{3})$
 
@@ -336,11 +338,11 @@ else:
 
 (ROSETTA 1) ROSETTA: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions - Schaap, et al(https://www.ars.usda.gov/arsuserfiles/20360500/pdf_pubs/P1765.pdf)
 
-(ROSETTA 2) Comparison of Models for Indirect Estimation of Water Retention and Available Water in Surface Soils - Schaap, et al. (this one is called version 1.3 in the software the engineers currently have)
+(ROSETTA 2) Comparison of Models for Indirect Estimation of Water Retention and Available Water in Surface Soils - Schaap, et al. This NRCS version is called v 1.3 in the software the engineers currently have. This version identifies both the top and bottom of soil layers and utilizes these depths in the model predictions.
 
 (ROSETTA3) Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3) - Zhang, Schaap
 
-ROSETTA Version 1 is the original. Version 3 is the newest.  Version 2 is currently what the engineers use to estimate the hydraulic parameters used in LE equations. This version has been added which is a bit different from version 1 and 3. Additionally, the new API allows logarithmic or linear output parameters to be returned. 
+ROSETTA Version 1 is the original. Version 3 is the newest.  Version 2 is currently what the engineers use to estimate the hydraulic parameters used in LE equations. This version has been added which is a bit different from version 1 and 3. Additionally, the new web service and API allow logarithmic or linear output parameters to be returned. 
 
 ## Testing and Validation 
 
