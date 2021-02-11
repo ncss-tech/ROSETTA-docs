@@ -348,6 +348,8 @@ For testing and validation purposes a "test" dataset must be created and used to
 
 The following query can be used in [Soil Data Access](https://sdmdataaccess.nrcs.usda.gov/Query.aspx) to assemble a test dataset of the soil parameters used in the ROSETTA model:
 
+```{SQL eval = FALSE}
+
 "SELECT areasymbol, areaname, musym, muname, mapunit.mukey, component.cokey, compname, comppct_r, majcompflag, hydricrating, chorizon.hzname, chorizon.hzdept_r,  chorizon.hzdepb_r, chorizon.om_r, chorizon.ksat_r AS Ksat_um_per_sec, chorizon.sandtotal_r, chorizon.silttotal_r, chorizon.claytotal_r, chorizon.dbthirdbar_r, chorizon.wthirdbar_r / 100   AS wthirdbar_decimal, chorizon.wfifteenbar_r / 100 AS wfifteenbar_decimal
 
 FROM legend
@@ -355,6 +357,7 @@ FROM legend
 INNER JOIN mapunit ON legend.lkey=mapunit.lkey AND LEFT (areasymbol, 2) IN  ('MN', 'SD', 'ND', 'IA')
 INNER JOIN component ON mapunit.mukey=component.mukey AND hydricrating = 'Yes' AND majcompflag = 'Yes'
 LEFT OUTER JOIN chorizon ON component.cokey=chorizon.cokey"
+```
 
 ## Future Projects
 Looking to the future, I’m exploring ways to automate the other puzzle piece to lateral effects distance determination which is the soil Hydrogeomorphic wetland classification into a web service that could be “called” along with the authoritative soil data.
