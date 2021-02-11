@@ -360,4 +360,4 @@ LEFT OUTER JOIN chorizon ON component.cokey=chorizon.cokey"
 ```
 
 ## Future Projects
-Looking to the future, I’m exploring ways to automate the other puzzle piece to lateral effects distance determination which is the soil Hydrogeomorphic wetland classification into a web service that could be “called” along with the authoritative soil data.
+Looking to the future, We're exploring ways to automate the other puzzle piece to lateral effects distance determination which is the soil Hydrogeomorphic wetland classification into a web service that could be “called” along with the authoritative soil data.
